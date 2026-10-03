@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadComponent("components/Hero.html", "hero-container"),
     loadComponent("components/About.html", "about-container"),
     loadComponent("components/Skills.html", "skills-container"),
+    loadComponent("components/Footer.html", "footer-container"),
   ]);
 
   initApp(); // 🔥 everything starts here
