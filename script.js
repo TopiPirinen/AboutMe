@@ -1,15 +1,20 @@
 async function loadComponent(path, elementId) {
   try {
     const response = await fetch(path);
+
+    if (!response.ok) {
+      console.error("Failed to load " + path);
+      return;
+    }
+
     const html = await response.text();
     document.getElementById(elementId).innerHTML = html;
   } catch (error) {
-    console.error(`Failed to load ${path}:`, error);
+    console.error("Failed to load component:", path, error);
   }
 }
 
-// Load all components
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", async function () {
   await Promise.all([
     loadComponent("components/NavBar.html", "navbar-container"),
     loadComponent("components/SideBar.html", "sidebar-container"),
@@ -19,47 +24,70 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadComponent("components/Footer.html", "footer-container"),
   ]);
 
-  initApp(); // 🔥 everything starts here
+  initApp();
 });
 
 function initApp() {
-  // Navbar active highlight
-  // Navbar active highlight using viewport midpoint
+  // ================= NAVBAR =================
+
   const navLinks = document.querySelectorAll("nav a");
   const sections = document.querySelectorAll("section");
 
   function updateActiveNav() {
-    const scrollMiddle = window.scrollY + window.innerHeight / 2; // middle of viewport
+    const scrollMiddle =
+      window.scrollY + window.innerHeight / 2;
+
     let current = "";
 
-    sections.forEach((section) => {
+    sections.forEach(function (section) {
       const sectionTop = section.offsetTop;
-      const sectionBottom = sectionTop + section.offsetHeight;
+      const sectionBottom =
+        sectionTop + section.offsetHeight;
 
-      // If viewport middle is inside this section, mark it active
-      if (scrollMiddle >= sectionTop && scrollMiddle < sectionBottom) {
+      if (
+        scrollMiddle >= sectionTop &&
+        scrollMiddle < sectionBottom
+      ) {
         current = section.getAttribute("id");
       }
     });
 
-    navLinks.forEach((link) => {
+    navLinks.forEach(function (link) {
       link.classList.remove("active");
-      if (link.getAttribute("href") === "#" + current)
+
+      if (
+        link.getAttribute("href") === "#" + current
+      ) {
         link.classList.add("active");
+      }
     });
   }
 
-  // Listen to scroll and resize
   window.addEventListener("scroll", updateActiveNav);
   window.addEventListener("resize", updateActiveNav);
-  updateActiveNav(); // initial check
 
-  navLinks.forEach((link) => {
-    link.addEventListener("click", (e) => {
+  updateActiveNav();
+
+  navLinks.forEach(function (link) {
+    link.addEventListener("click", function (e) {
       e.preventDefault();
-      const targetId = link.getAttribute("href").substring(1);
-      const targetSection = document.getElementById(targetId);
-      const offset = 100; // navbar + padding
+
+      const href = link.getAttribute("href");
+
+      if (!href) {
+        return;
+      }
+
+      const targetId = href.substring(1);
+      const targetSection =
+        document.getElementById(targetId);
+
+      if (!targetSection) {
+        return;
+      }
+
+      const offset = 100;
+
       window.scrollTo({
         top: targetSection.offsetTop - offset,
         behavior: "smooth",
@@ -67,56 +95,55 @@ function initApp() {
     });
   });
 
-  // Sidebar toggle
-  const menuBtn = document.getElementById("menu-toggle");
-  const sidebar = document.getElementById("sidebar");
-  const backdrop = document.getElementById("sidebar-backdrop");
+  // ================= SIDEBAR =================
 
-  // Toggle open/close
-  function toggleSidebar() {
-    sidebar.classList.toggle("open");
-    backdrop.classList.toggle("show");
-    menuBtn.classList.toggle("open");
+  const menuBtn =
+    document.getElementById("menu-toggle");
+
+  const sidebar =
+    document.getElementById("sidebar");
+
+  const backdrop =
+    document.getElementById("sidebar-backdrop");
+
+  if (menuBtn && sidebar && backdrop) {
+    menuBtn.addEventListener("click", function () {
+      sidebar.classList.toggle("open");
+      backdrop.classList.toggle("show");
+      menuBtn.classList.toggle("open");
+    });
+
+    backdrop.addEventListener("click", function () {
+      sidebar.classList.remove("open");
+      backdrop.classList.remove("show");
+      menuBtn.classList.remove("open");
+    });
   }
 
-  menuBtn.addEventListener("click", toggleSidebar);
+  // ================= THEME =================
 
-  // Click outside to close
-  backdrop.addEventListener("click", () => {
-    sidebar.classList.remove("open");
-    backdrop.classList.remove("show");
-    menuBtn.classList.remove("open");
-  });
+  const themeToggle =
+    document.getElementById("theme-toggle");
 
-  // Theme toggle
-  const themeToggle = document.getElementById("theme-toggle");
-  const themeLabel = document.getElementById("theme-label");
+  if (themeToggle) {
+    // Load saved theme
+    if (localStorage.getItem("theme") === "light") {
+      document.body.classList.add("light");
+      themeToggle.checked = true;
+    } else {
+      document.body.classList.remove("light");
+      themeToggle.checked = false;
+    }
 
-  // Load saved theme
-  if (localStorage.getItem("theme") === "light") {
-    document.body.classList.add("light");
-    themeToggle.checked = true;
+    // Toggle theme
+    themeToggle.addEventListener("change", function () {
+      if (themeToggle.checked) {
+        document.body.classList.add("light");
+        localStorage.setItem("theme", "light");
+      } else {
+        document.body.classList.remove("light");
+        localStorage.setItem("theme", "dark");
+      }
+    });
   }
-
-  themeToggle.addEventListener("change", () => {
-    if (themeToggle.checked) {
-      document.body.classList.add("light");
-      localStorage.setItem("theme", "light");
-    } else {
-      document.body.classList.remove("light");
-      localStorage.setItem("theme", "dark");
-    }
-  });
-
-  themeToggle.addEventListener("change", () => {
-    if (themeToggle.checked) {
-      document.body.classList.add("light");
-      localStorage.setItem("theme", "light");
-      themeLabel.textContent = "☀️ Light Mode";
-    } else {
-      document.body.classList.remove("light");
-      localStorage.setItem("theme", "dark");
-      themeLabel.textContent = "🌙 Dark Mode";
-    }
-  });
 }

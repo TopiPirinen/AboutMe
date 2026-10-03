@@ -222,9 +222,13 @@ nav ul li a {
   font-size: 4rem;
   margin: 0.3em 0;
   background: linear-gradient(90deg, #4cc9f0, #a5b4fc);
+
+  background-clip: text;
   -webkit-background-clip: text;
+
   -webkit-text-fill-color: transparent;
 }
+
 
 .scroll-down {
   display: inline-block;
@@ -244,6 +248,16 @@ nav ul li a {
     transform: translateY(10px);
   }
 }
+
+.hero-description {
+  max-width: 600px;
+  margin: 0.8em auto 0;
+
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
 
 /* ================= HERO GLASS SHIMMER ================= */
 .hero-content::before {
@@ -331,15 +345,37 @@ h2 {
   font-size: 0.85rem;
 }
 
+.hobbies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em;
+}
+
 .hobbies span {
   display: inline-block;
-  background: rgba(76, 201, 240, 0.15);
-  color: #4cc9f0;
-  padding: 0.4em 0.8em;
-  margin: 0.3em;
+  padding: 0.45em 0.9em;
+
   border-radius: 999px;
-  font-size: 0.85rem;
+
+  color: #4cc9f0;
+  font-size: 0.8rem;
+
+  background: rgba(76, 201, 240, 0.08);
+  border: 1px solid rgba(76, 201, 240, 0.18);
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
 }
+
+.hobbies span:hover {
+  background: rgba(76, 201, 240, 0.15);
+  border-color: rgba(76, 201, 240, 0.35);
+
+  transform: translateY(-2px);
+}
+
 
 /* ================= SKILLS ================= */
 .skills-grid {
@@ -619,53 +655,80 @@ body {
   margin-bottom: 1em;
 }
 
-/* ================= TOGGLE SWITCH ================= */
+/* ================= THEME TOGGLE ================= */
+
 .toggle-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 1em;
 }
 
-/* switch */
+#theme-label {
+color: var(--text-main);
+}
+
+/* Switch */
 .switch {
-  position: relative;
-  display: inline-block;
-  width: 42px;
-  height: 22px;
+position: relative;
+display: inline-block;
+width: 44px;
+height: 24px;
+flex-shrink: 0;
 }
 
 .switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+opacity: 0;
+width: 0;
+height: 0;
 }
 
 .slider {
-  position: absolute;
-  inset: 0;
-  background-color: #555;
-  border-radius: 999px;
-  transition: 0.3s;
+position: absolute;
+inset: 0;
+
+background: rgba(148, 163, 184, 0.35);
+border: 1px solid rgba(255, 255, 255, 0.12);
+
+border-radius: 999px;
+cursor: pointer;
+
+transition:
+background 0.25s ease,
+border-color 0.25s ease;
 }
 
-.slider:before {
-  content: "";
-  position: absolute;
-  height: 16px;
-  width: 16px;
-  left: 3px;
-  top: 3px;
-  background-color: white;
-  border-radius: 50%;
-  transition: 0.3s;
+.slider::before {
+content: "";
+
+position: absolute;
+
+width: 16px;
+height: 16px;
+
+left: 3px;
+top: 3px;
+
+background: #e5e7eb;
+border-radius: 50%;
+
+box-shadow:
+0 2px 5px rgba(0, 0, 0, 0.3);
+
+transition:
+transform 0.25s ease,
+background 0.25s ease;
 }
 
+/* Light mode ON */
 input:checked + .slider {
-  background-color: #4cc9f0;
+background: rgba(76, 201, 240, 0.7);
+border-color: rgba(76, 201, 240, 0.8);
 }
 
-input:checked + .slider:before {
-  transform: translateX(20px);
+input:checked + .slider::before {
+transform: translateX(20px);
+background: #ffffff;
 }
 
 /* ================= SCROLLBAR (macOS-like) ================= */
@@ -756,100 +819,103 @@ body.light .glass {
 /* ================= FOOTER ================= */
 
 .site-footer {
-width: 100%;
-margin-top: 80px;
-padding: 2em max(20px, calc((100% - 1000px) / 2));
+  position: relative;
 
-background: rgba(255, 255, 255, 0.025);
-border-top: 1px solid var(--border);
+  margin-top: 60px;
+  padding: 2.5em 20px 1.5em;
 
-backdrop-filter: blur(15px);
--webkit-backdrop-filter: blur(15px);
+  border-top: 1px solid var(--border);
+
+  background: rgba(2, 6, 23, 0.35);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .footer-content {
-max-width: 1000px;
-margin: auto;
+  max-width: 1000px;
+  margin: 0 auto;
 
-display: flex;
-align-items: center;
-justify-content: space-between;
-gap: 2em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2em;
 }
 
 .footer-signature {
-display: flex;
-flex-direction: column;
-gap: 0.1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
 }
 
 .footer-label {
-color: var(--text-muted);
-font-size: 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
 }
 
 .signature {
-color: #4cc9f0;
-font-family: "Brush Script MT", "Segoe Script", cursive;
-font-size: 1.7rem;
-font-style: italic;
+  color: var(--text-main);
+  font-family: monospace;
+  font-size: 0.95rem;
 }
 
-/* LinkedIn */
-.footer-link {
-color: var(--text-secondary);
-text-decoration: none;
+.footer-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
 
-padding: 0.45em 0.9em;
-border-radius: 999px;
+  padding: 0.45em 0.8em;
+  border-radius: 8px;
 
-border: 1px solid var(--border);
-background: rgba(76, 201, 240, 0.05);
-
-transition: all 0.25s ease;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease;
 }
 
-.footer-link:hover {
-color: #4cc9f0;
-background: rgba(76, 201, 240, 0.12);
-border-color: rgba(76, 201, 240, 0.3);
-
-transform: translateY(-2px);
+.footer-links a:hover {
+  color: #4cc9f0;
+  background: rgba(76, 201, 240, 0.1);
 }
 
 .footer-bottom {
-max-width: 1000px;
-margin: 1.5em auto 0;
-padding-top: 1em;
+  max-width: 1000px;
+  margin: 1.5em auto 0;
+  padding-top: 1em;
 
-display: flex;
-justify-content: space-between;
-gap: 1em;
+  border-top: 1px solid var(--border);
 
-border-top: 1px solid var(--border);
-
-color: var(--text-muted);
-font-size: 0.7rem;
+  color: var(--text-muted);
+  font-size: 0.7rem;
 }
 
-/* Light mode */
+/* ================= LIGHT MODE FOOTER ================= */
+
 body.light .site-footer {
-background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.72);
+
+  border-top-color: rgba(0, 0, 0, 0.08);
+
+  box-shadow:
+    0 -8px 30px rgba(0, 0, 0, 0.04);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-/* Mobile */
+body.light .footer-bottom {
+  border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+/* ================= MOBILE FOOTER ================= */
+
 @media (max-width: 600px) {
-.site-footer {
-margin-top: 60px;
-padding: 1.5em 20px;
-}
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2em;
+  }
 
-.footer-content {
-align-items: flex-start;
-}
-
-.footer-bottom {
-flex-direction: column;
-gap: 0.3em;
-}
+  .footer-links {
+    width: 100%;
+  }
 }
