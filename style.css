@@ -1,24 +1,150 @@
-/* Reset */
+/*
+ * Portfolio Website
+ * -----------------
+ * Main stylesheet.
+ *
+ * Structure:
+ * 1. Global reset & theme variables
+ * 2. Base page styles
+ * 3. Navigation
+ * 4. Hero section
+ * 5. Shared sections
+ * 6. About section
+ * 7. Skills section
+ * 8. Sidebar
+ * 9. Theme toggle
+ * 10. Scrollbar
+ * 11. Footer
+ * 12. Responsive styles
+ */
+
+/* =========================================================
+   1. GLOBAL RESET & THEME VARIABLES
+   ========================================================= */
+
+/*
+ * Reset browser defaults so spacing behaves consistently
+ * across different browsers.
+ */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, "San Francisco", Arial, sans-serif;
-  line-height: 1.6;
-  scroll-behavior: smooth;
-  background: linear-gradient(180deg, #0f172a, #020617);
-  color: var(--text-main);
+/*
+ * Dark theme is the default.
+ *
+ * Keeping colors here makes it easier to change the
+ * site's visual style later without searching through
+ * the entire stylesheet.
+ */
+:root {
+  --bg-main: #020617;
+
+  --text-main: #e5e7eb;
+  --text-secondary: #94a3b8;
+  --text-muted: #9ca3af;
+
+  --accent: #4cc9f0;
+  --accent-secondary: #a5b4fc;
+
+  --glass: rgba(255, 255, 255, 0.05);
+  --glass-light: rgba(255, 255, 255, 0.04);
+
+  --border: rgba(255, 255, 255, 0.08);
+
+  --shadow-dark: rgba(0, 0, 0, 0.3);
 }
 
+/*
+ * Light theme overrides only the values that need to change.
+ *
+ * The layout and component styles stay the same.
+ */
+body.light {
+  --bg-main: #ffffff;
+
+  --text-main: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+
+  --glass: rgba(255, 255, 255, 0.6);
+  --glass-light: rgba(255, 255, 255, 0.72);
+
+  --border: rgba(0, 0, 0, 0.08);
+
+  --shadow-dark: rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   2. BASE PAGE
+   ========================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+
+  font-family:
+    -apple-system, BlinkMacSystemFont, "San Francisco", Arial, sans-serif;
+
+  line-height: 1.6;
+  color: var(--text-main);
+
+  /*
+   * The background uses several gradients to create the
+   * subtle color variation behind the glass panels.
+   */
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(76, 201, 240, 0.15),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(165, 180, 252, 0.15),
+      transparent 40%
+    ),
+    linear-gradient(180deg, #0f172a, #020617);
+}
+
+/*
+ * Light mode uses a brighter background while keeping
+ * the same general gradient concept.
+ */
+body.light {
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(76, 201, 240, 0.25),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(99, 102, 241, 0.2),
+      transparent 40%
+    ),
+    linear-gradient(180deg, #eef2ff, #ffffff);
+}
+
+/*
+ * Additional soft background glow.
+ *
+ * It sits behind all content and gives the glass elements
+ * something to visually interact with.
+ */
 body::before {
   content: "";
+
   position: fixed;
   inset: 0;
+
   z-index: -1;
+  pointer-events: none;
 
   background:
     radial-gradient(
@@ -36,25 +162,20 @@ body::before {
   opacity: 0.6;
 }
 
-:root {
-  --text-main: #e5e7eb;
-  --text-secondary: #94a3b8;
-  --text-muted: #9ca3af;
-}
+/* =========================================================
+   3. NAVIGATION
+   ========================================================= */
 
-body.light {
-  --text-main: #111827;
-  --text-secondary: #374151;
-  --text-muted: #6b7280;
-}
-
-/* ================= NAVBAR ================= */
 nav {
   position: fixed;
   top: 0;
   width: 100%;
+
   z-index: 1000;
 
+  /*
+   * Backdrop blur creates the glass effect while scrolling.
+   */
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
 
@@ -66,10 +187,15 @@ nav {
     inset 0 1px rgba(255, 255, 255, 0.1);
 }
 
+/*
+ * Subtle highlight across the navbar.
+ */
 nav::before {
   content: "";
+
   position: absolute;
   inset: 0;
+
   pointer-events: none;
 
   background: linear-gradient(
@@ -86,51 +212,98 @@ nav .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   padding: 0.8em 2em;
 }
 
 nav .logo {
   font-family: monospace;
   font-weight: bold;
-  color: #4cc9f0;
+
+  color: var(--accent);
   text-decoration: none;
 }
 
 nav ul {
-  list-style: none;
   display: flex;
   gap: 1.2em;
+
+  list-style: none;
 }
 
+nav ul li a {
+  display: block;
+
+  color: var(--text-secondary);
+  text-decoration: none;
+
+  padding: 0.5em 0.8em;
+  border-radius: 8px;
+
+  transition:
+    color 0.25s ease,
+    background 0.25s ease;
+}
+
+/*
+ * Active navigation item.
+ */
 nav ul li a.active {
   position: relative;
-  color: #4cc9f0;
+
+  color: var(--accent);
   background: rgba(76, 201, 240, 0.2);
+
   border-radius: 999px;
   padding: 0.5em 1em;
+
   box-shadow: 0 4px 20px rgba(76, 201, 240, 0.4);
-  transition: all 0.3s ease;
 }
 
 nav ul li a:hover:not(.active) {
   background: rgba(76, 201, 240, 0.1);
 }
 
-/* ================= HERO ================= */
+/* =========================================================
+   4. HERO
+   ========================================================= */
+
+/*
+ * The hero sits below the fixed navbar.
+ *
+ * The top margin creates a small visual gap when the page
+ * is at the very top instead of letting the hero touch
+ * the navbar.
+ */
 .hero-section {
   min-height: 80vh;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   position: relative;
+
+  /*
+   * Extra space below the fixed navbar.
+   * The section itself still keeps the normal 60px
+   * separation from the other sections.
+   */
+  margin-top: 120px;
+
   text-align: center;
-  background: #020617; /* base dark color */
+
+  background: #020617;
 }
 
-/* ================= HERO OVERLAY ================= */
+
+/*
+ * Decorative gradient layer behind the hero content.
+ */
 .hero-overlay {
   position: absolute;
   inset: 0;
+
   z-index: 0;
 
   background-image:
@@ -152,50 +325,41 @@ nav ul li a:hover:not(.active) {
 
   filter: blur(100px) saturate(150%);
   opacity: 0.7;
-  transition: all 0.5s ease;
+
+  transition: opacity 0.5s ease;
 }
 
-/* Light mode colors - do NOT overwrite animation */
-body.light .hero-overlay {
-  background-image:
-    radial-gradient(
-      circle at 25% 25%,
-      rgba(128, 240, 200, 0.25),
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 75% 70%,
-      rgba(240, 128, 180, 0.25),
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(128, 240, 200, 0.2),
-      transparent 60%
-    );
-}
-
-/* Hero content */
+/*
+ * Hero text container.
+ *
+ * This is intentionally larger than the small glass cards
+ * elsewhere on the page because it is the main focal point.
+ */
 .hero-content {
   position: relative;
   z-index: 1;
 
-  /* Stronger glass effect */
+  max-width: 700px;
+  padding: 3em 2em;
+
+  border-radius: 20px;
+
   backdrop-filter: blur(30px) saturate(200%);
   -webkit-backdrop-filter: blur(30px) saturate(200%);
-  border-radius: 20px;
-  padding: 3em 2em;
-  max-width: 700px;
 
-  /* Depth & subtle shine */
+  background: var(--glass);
+
+  overflow: hidden;
+
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.4),
     inset 0 1px 2px rgba(255, 255, 255, 0.25);
-
-  overflow: hidden;
 }
 
-/* Light mode glass */
+/*
+ * Light mode needs a softer shadow because the dark
+ * shadow would look too heavy against the bright background.
+ */
 body.light .hero-content {
   box-shadow:
     0 12px 40px rgba(0, 0, 0, 0.08),
@@ -210,18 +374,17 @@ body.light .hero-content {
   color: var(--text-muted);
 }
 
-nav ul li a {
-  color: var(--text-secondary);
-  text-decoration: none;
-  padding: 0.5em 0.8em;
-  border-radius: 8px;
-  transition: all 0.25s ease;
-}
-
+/*
+ * Main hero name.
+ *
+ * The gradient gives the title its primary visual accent.
+ */
 .hero-name {
-  font-size: 4rem;
   margin: 0.3em 0;
-  background: linear-gradient(90deg, #4cc9f0, #a5b4fc);
+
+  font-size: 4rem;
+
+  background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
 
   background-clip: text;
   -webkit-background-clip: text;
@@ -229,14 +392,31 @@ nav ul li a {
   -webkit-text-fill-color: transparent;
 }
 
+.hero-description {
+  max-width: 600px;
 
+  margin: 0.8em auto 0;
+
+  color: var(--text-secondary);
+
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/*
+ * Optional animated scroll indicator.
+ */
 .scroll-down {
   display: inline-block;
+
   margin-top: 2em;
+
   font-size: 2rem;
-  color: #4cc9f0;
-  animation: bounce 2s infinite;
+  color: var(--accent);
+
   text-decoration: none;
+
+  animation: bounce 2s infinite;
 }
 
 @keyframes bounce {
@@ -244,155 +424,190 @@ nav ul li a {
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(10px);
   }
 }
 
-.hero-description {
-  max-width: 600px;
-  margin: 0.8em auto 0;
+/* ---------------------------------------------------------
+   Hero glass shimmer
+   --------------------------------------------------------- */
 
-  color: var(--text-secondary);
-  font-size: 1rem;
-  line-height: 1.7;
-}
-
-
-/* ================= HERO GLASS SHIMMER ================= */
 .hero-content::before {
   content: "";
+
   position: absolute;
   inset: 0;
+
   border-radius: inherit;
+
   pointer-events: none;
 
-  /* diagonal shimmer gradient */
   background: linear-gradient(
     120deg,
     rgba(255, 255, 255, 0.15) 0%,
     rgba(255, 255, 255, 0.05) 50%,
     rgba(255, 255, 255, 0.15) 100%
   );
+
   opacity: 0.4;
 
-  /* animate the shimmer */
   transform: translateX(-100%) skewX(-20deg);
+
   animation: shimmer 5s infinite linear;
 }
 
 @keyframes shimmer {
   0% {
-    transform: translateX(-200%) skewX(-20deg); /* off-screen left */
+    transform: translateX(-200%) skewX(-20deg);
   }
+
   20% {
-    transform: translateX(-200%) skewX(-20deg); /* pause before moving */
+    transform: translateX(-200%) skewX(-20deg);
   }
+
   40% {
-    transform: translateX(200%) skewX(-20deg); /* main crossing */
+    transform: translateX(200%) skewX(-20deg);
   }
+
   100% {
-    transform: translateX(200%) skewX(-20deg); /* hold at end */
+    transform: translateX(200%) skewX(-20deg);
   }
 }
 
-/* ================= SECTIONS ================= */
+/* =========================================================
+   5. SHARED SECTIONS
+   ========================================================= */
+
+/*
+ * Default spacing for content sections.
+ */
 section {
-  padding: 120px 20px;
   max-width: 1000px;
-  margin: auto;
+
+  margin: 60px auto 0;
+  padding: 120px 20px;
 }
 
-/* Glass section panels */
+/*
+ * Shared glass panel used by About, Skills and Hero.
+ *
+ * Hero has its own margin-top above, but keeping the shared
+ * styling here avoids duplicating the glass appearance.
+ */
 .about-section,
 .skills-section,
 .hero-section {
-  margin-top: 60px;
   border-radius: 20px;
+
   backdrop-filter: blur(20px);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(20px);
+
+  background: var(--glass-light);
+
+  border: 1px solid var(--border);
+
+  box-shadow: 0 10px 30px var(--shadow-dark);
 }
 
-/* ================= ABOUT ================= */
 h2 {
   margin-bottom: 1em;
+
   font-size: 2rem;
 }
 
+/* =========================================================
+   6. ABOUT
+   ========================================================= */
+
+/*
+ * Two-column information layout.
+ */
 .info-grid {
   display: grid;
+
   grid-template-columns: 1fr 1fr;
+
   gap: 1em;
+
   margin: 1.5em 0;
 }
 
 .info-grid div span {
   font-weight: bold;
-  color: #4cc9f0;
+  color: var(--accent);
 }
 
+/*
+ * Timeline-style experience entries.
+ */
 .experience .job {
-  border-left: 2px solid rgba(76, 201, 240, 0.6);
-  padding-left: 1em;
   margin-bottom: 1.5em;
+
+  padding-left: 1em;
+
+  border-left: 2px solid rgba(76, 201, 240, 0.6);
 }
 
 .experience .job .period {
   font-family: monospace;
-  color: #94a3b8;
+
+  color: var(--text-secondary);
+
   font-size: 0.85rem;
 }
 
+/*
+ * Hobby tags.
+ *
+ * These intentionally use the same styling as the
+ * AI-assisted development tags.
+ */
 .hobbies {
   display: flex;
   flex-wrap: wrap;
+
   gap: 0.6em;
 }
 
-.hobbies span {
-  display: inline-block;
-  padding: 0.45em 0.9em;
+/* =========================================================
+   7. SKILLS
+   ========================================================= */
 
-  border-radius: 999px;
-
-  color: #4cc9f0;
-  font-size: 0.8rem;
-
-  background: rgba(76, 201, 240, 0.08);
-  border: 1px solid rgba(76, 201, 240, 0.18);
-
-  transition:
-    background 0.25s ease,
-    border-color 0.25s ease,
-    transform 0.25s ease;
-}
-
-.hobbies span:hover {
-  background: rgba(76, 201, 240, 0.15);
-  border-color: rgba(76, 201, 240, 0.35);
-
-  transform: translateY(-2px);
-}
-
-
-/* ================= SKILLS ================= */
+/*
+ * Main skills cards.
+ *
+ * auto-fit allows the grid to automatically change the
+ * number of columns depending on available width.
+ */
 .skills-grid {
   display: grid;
+
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
   gap: 1.2em;
+
   margin-top: 1.5em;
 }
 
 .skill-card {
-  backdrop-filter: blur(12px);
-  background: var(--glass);
-  padding: 1.2em;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
-  transition: all 0.3s ease;
+
+  padding: 1.2em;
+
+  border-radius: 16px;
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  background: var(--glass);
+
+  border: 1px solid var(--border);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .skill-card:hover {
@@ -403,172 +618,221 @@ h2 {
     inset 0 1px rgba(255, 255, 255, 0.2);
 }
 
-.skill-card h4 {
-  margin-bottom: 0.5em;
-  color: #4cc9f0;
-}
-
-/* ================= AI-ASSISTED DEVELOPMENT ================= */
-
-.ai-skills {
-position: relative;
-margin-top: 3em;
-padding-top: 1.8em;
-
-border-top: 1px solid var(--border);
-}
-
-/* Header */
-.ai-skills-header {
-display: flex;
-align-items: center;
-gap: 0.65em;
-margin-bottom: 1em;
-}
-
-.ai-skills-header h3 {
-margin: 0;
-font-size: 0.95rem;
-font-weight: 500;
-color: var(--text-secondary);
-}
-
-/* Small glowing indicator */
-.ai-indicator {
-width: 7px;
-height: 7px;
-border-radius: 50%;
-
-background: #4cc9f0;
-
-box-shadow:
-0 0 8px rgba(76, 201, 240, 0.8),
-0 0 18px rgba(76, 201, 240, 0.4);
-}
-
-/* Tags */
-.ai-skills-tags {
-display: flex;
-flex-wrap: wrap;
-gap: 0.6em;
-}
-
-.ai-skills-tags span {
-padding: 0.45em 0.9em;
-
-border-radius: 999px;
-
-color: #4cc9f0;
-font-size: 0.8rem;
-
-background: rgba(76, 201, 240, 0.08);
-border: 1px solid rgba(76, 201, 240, 0.18);
-
-transition:
-background 0.25s ease,
-border-color 0.25s ease,
-transform 0.25s ease;
-}
-
-.ai-skills-tags span:hover {
-background: rgba(76, 201, 240, 0.15);
-border-color: rgba(76, 201, 240, 0.35);
-
-transform: translateY(-2px);
-}
-
-/* Light mode */
-body.light .ai-skills {
-border-color: rgba(0, 0, 0, 0.08);
-}
-
-body.light .ai-skills-tags span {
-background: rgba(76, 201, 240, 0.08);
-}
-
-/* ================= THEME VARIABLES ================= */
-:root {
-  --bg-main: linear-gradient(180deg, #0f172a, #020617);
-  --text-main: #e5e7eb;
-  --glass: rgba(255, 255, 255, 0.05);
-  --border: rgba(255, 255, 255, 0.08);
-}
-
-body.light {
-  background:
-    radial-gradient(
-      circle at 20% 30%,
-      rgba(76, 201, 240, 0.25),
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 80% 70%,
-      rgba(99, 102, 241, 0.2),
-      transparent 40%
-    ),
-    linear-gradient(180deg, #eef2ff, #ffffff);
-}
-
 body.light .skill-card {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* apply variables */
-body {
-  background:
-    radial-gradient(
-      circle at 20% 30%,
-      rgba(76, 201, 240, 0.15),
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 80% 70%,
-      rgba(165, 180, 252, 0.15),
-      transparent 40%
-    ),
-    linear-gradient(180deg, #0f172a, #020617);
+.skill-card h4 {
+  margin-bottom: 0.5em;
+
+  color: var(--accent);
 }
 
-/* ================= HAMBURGER BUTTON ================= */
-/* ================= HAMBURGER ICON ================= */
-/* ================= HAMBURGER ICON FINAL FIX ================= */
+/* ---------------------------------------------------------
+   AI-assisted development
+   --------------------------------------------------------- */
+
+.ai-skills {
+  position: relative;
+
+  margin-top: 3em;
+  padding-top: 1.8em;
+
+  border-top: 1px solid var(--border);
+}
+
+.ai-skills-header {
+  display: flex;
+  align-items: center;
+
+  gap: 0.65em;
+
+  margin-bottom: 1em;
+}
+
+.ai-skills-header h3 {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/*
+ * Small glowing dot used as a visual indicator for
+ * the AI-assisted development area.
+ */
+.ai-indicator {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: var(--accent);
+
+  box-shadow:
+    0 0 8px rgba(76, 201, 240, 0.8),
+    0 0 18px rgba(76, 201, 240, 0.4);
+}
+
+/*
+ * AI tags and hobby tags share the same visual language.
+ */
+.ai-skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 0.6em;
+}
+
+.ai-skills-tags span,
+.hobbies span {
+  display: inline-block;
+
+  padding: 0.45em 0.9em;
+
+  border-radius: 999px;
+
+  color: var(--accent);
+
+  font-size: 0.8rem;
+
+  background: rgba(76, 201, 240, 0.08);
+
+  border: 1px solid rgba(76, 201, 240, 0.18);
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.ai-skills-tags span:hover,
+.hobbies span:hover {
+  background: rgba(76, 201, 240, 0.15);
+
+  border-color: rgba(76, 201, 240, 0.35);
+
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   8. SIDEBAR
+   ========================================================= */
+
+#sidebar {
+  position: fixed;
+
+  left: -260px;
+  top: 0;
+
+  width: 260px;
+  height: 100%;
+
+  padding: 2em 1.5em;
+
+  z-index: 1050;
+
+  color: var(--text-main);
+
+  background: var(--glass);
+
+  border-right: 1px solid var(--border);
+
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+
+  transition: left 0.3s ease;
+}
+
+#sidebar.open {
+  left: 0;
+}
+
+#sidebar h3 {
+  margin-bottom: 1em;
+}
+
+/*
+ * Darkened/blurred layer behind the open sidebar.
+ */
+#sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+
+  z-index: 1040;
+
+  background: rgba(0, 0, 0, 0.3);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition: opacity 0.3s ease;
+}
+
+#sidebar-backdrop.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ---------------------------------------------------------
+   Hamburger button
+   --------------------------------------------------------- */
 
 #menu-toggle {
   position: fixed;
-  top: 70px;
-  left: 16px;
+
+  top: 76px;
+  left: 20px;
+
   width: 36px;
   height: 30px;
 
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(10px);
-  border-radius: 8px;
-  cursor: pointer;
   z-index: 1060;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  transition:
-    left 0.3s ease,
-    transform 0.3s ease;
+
+  cursor: pointer;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  border: 1px solid var(--border);
+
+  border-radius: 8px;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition: left 0.3s ease;
 }
 
-/* lines */
+/*
+ * Three lines that make up the hamburger icon.
+ */
 #menu-toggle span {
   position: absolute;
+
+  left: 50%;
+
   width: 18px;
   height: 2px;
+
   background: var(--text-main);
+
   border-radius: 2px;
-  left: 50%;
+
   transform: translateX(-50%);
+
   transition: all 0.3s ease;
 }
 
-/* stack them vertically */
 #menu-toggle span:nth-child(1) {
   top: 8px;
 }
@@ -581,15 +845,19 @@ body {
   top: 20px;
 }
 
-/* Move button when sidebar opens */
+/*
+ * Move the button next to the open sidebar.
+ */
 #menu-toggle.open {
-  left: 280px; /* sidebar width (260) + spacing */
-  transition: left 0.3s ease;
+  left: 280px;
 }
 
-/* animate to X */
+/*
+ * Transform the hamburger into an X.
+ */
 #menu-toggle.open span:nth-child(1) {
   top: 14px;
+
   transform: translateX(-50%) rotate(45deg);
 }
 
@@ -599,153 +867,130 @@ body {
 
 #menu-toggle.open span:nth-child(3) {
   top: 14px;
+
   transform: translateX(-50%) rotate(-45deg);
 }
 
-/* ================= BACKDROP ================= */
-#sidebar-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(6px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  z-index: 1040;
-}
-
-#sidebar-backdrop.show {
-  opacity: 1;
-  pointer-events: all;
-}
-
-#sidebar {
-  color: var(--text-main);
-  position: fixed;
-  left: -260px;
-  top: 0;
-  height: 100%;
-  width: 260px;
-  padding: 2em 1.5em;
-
-  background: var(--glass);
-  border-right: 1px solid var(--border);
-  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
-
-  transition: left 0.3s ease;
-  z-index: 1050;
-}
-
-.hero-content,
-.about-section,
-.skills-section,
-.skill-card,
-.hero-section,
-.skill-card {
-  /* apply glass */
-  backdrop-filter: blur(20px) saturate(180%);
-  background: var(--glass);
-}
-
-#sidebar.open {
-  left: 0;
-}
-
-#sidebar h3 {
-  margin-bottom: 1em;
-}
-
-/* ================= THEME TOGGLE ================= */
+/* =========================================================
+   9. THEME TOGGLE
+   ========================================================= */
 
 .toggle-row {
-display: flex;
-justify-content: space-between;
-align-items: center;
-gap: 1em;
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 1em;
 }
 
 #theme-label {
-color: var(--text-main);
+  color: var(--text-main);
 }
 
-/* Switch */
+/*
+ * Toggle switch container.
+ */
 .switch {
-position: relative;
-display: inline-block;
-width: 44px;
-height: 24px;
-flex-shrink: 0;
+  position: relative;
+
+  display: inline-block;
+
+  width: 44px;
+  height: 24px;
+
+  flex-shrink: 0;
 }
 
 .switch input {
-opacity: 0;
-width: 0;
-height: 0;
+  width: 0;
+  height: 0;
+
+  opacity: 0;
 }
 
+/*
+ * Visible switch background.
+ */
 .slider {
-position: absolute;
-inset: 0;
+  position: absolute;
+  inset: 0;
 
-background: rgba(148, 163, 184, 0.35);
-border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
 
-border-radius: 999px;
-cursor: pointer;
+  background: rgba(148, 163, 184, 0.35);
 
-transition:
-background 0.25s ease,
-border-color 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 999px;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease;
 }
 
+/*
+ * The circular switch handle.
+ */
 .slider::before {
-content: "";
+  content: "";
 
-position: absolute;
+  position: absolute;
 
-width: 16px;
-height: 16px;
+  width: 16px;
+  height: 16px;
 
-left: 3px;
-top: 3px;
+  left: 3px;
+  top: 3px;
 
-background: #e5e7eb;
-border-radius: 50%;
+  background: #e5e7eb;
 
-box-shadow:
-0 2px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
 
-transition:
-transform 0.25s ease,
-background 0.25s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
 }
 
-/* Light mode ON */
+/*
+ * Checked = light mode.
+ */
 input:checked + .slider {
-background: rgba(76, 201, 240, 0.7);
-border-color: rgba(76, 201, 240, 0.8);
+  background: rgba(76, 201, 240, 0.7);
+
+  border-color: rgba(76, 201, 240, 0.8);
 }
 
 input:checked + .slider::before {
-transform: translateX(20px);
-background: #ffffff;
+  transform: translateX(20px);
+
+  background: #ffffff;
 }
 
-/* ================= SCROLLBAR (macOS-like) ================= */
+/* =========================================================
+   10. SCROLLBAR
+   ========================================================= */
 
-/* Chrome, Edge, Safari */
+/*
+ * Chrome / Edge / Safari.
+ */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent; /* removes white background */
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.25);
+
   border-radius: 999px;
+
   border: 2px solid transparent;
+
   background-clip: content-box;
 }
 
@@ -753,7 +998,9 @@ background: #ffffff;
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* Light mode adjustment */
+/*
+ * Light mode scrollbar.
+ */
 body.light ::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.25);
 }
@@ -762,9 +1009,12 @@ body.light ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.4);
 }
 
-/* Firefox */
+/*
+ * Firefox.
+ */
 * {
   scrollbar-width: thin;
+
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
 
@@ -772,56 +1022,21 @@ body.light * {
   scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
 }
 
-.glass {
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+/* =========================================================
+   11. FOOTER
+   ========================================================= */
 
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    inset 0 1px rgba(255, 255, 255, 0.1);
-}
-
-body.light .glass {
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.08),
-    inset 0 1px rgba(255, 255, 255, 0.9);
-}
-
-.glass::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-
-  background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.25),
-    rgba(255, 255, 255, 0.05) 40%,
-    transparent 60%
-  );
-
-  opacity: 0.6;
-}
-
-#theme-label {
-  color: var(--text-main);
-}
-
-
-
-/* ================= FOOTER ================= */
-
+/*
+ * The footer is deliberately smaller than the main sections.
+ *
+ * It should feel like the end of the page rather than
+ * another large content panel.
+ */
 .site-footer {
   position: relative;
 
   margin-top: 60px;
+
   padding: 2.5em 20px 1.5em;
 
   border-top: 1px solid var(--border);
@@ -834,84 +1049,250 @@ body.light .glass {
 
 .footer-content {
   max-width: 1000px;
+
   margin: 0 auto;
 
   display: flex;
+
   justify-content: space-between;
   align-items: center;
+
   gap: 2em;
 }
 
+/*
+ * Footer signature area.
+ */
 .footer-signature {
   display: flex;
   flex-direction: column;
+
   gap: 0.15em;
 }
 
 .footer-label {
   color: var(--text-muted);
+
   font-size: 0.75rem;
 }
 
+/*
+ * Signature styling.
+ *
+ * A cursive font is used when the browser/OS provides one.
+ * The fallback keeps the signature visually distinct from
+ * the normal body text.
+ */
 .signature {
   color: var(--text-main);
-  font-family: monospace;
-  font-size: 0.95rem;
+
+  font-family: "Brush Script MT", "Segoe Script", "Snell Roundhand", cursive;
+
+  font-size: 1.35rem;
+  font-style: italic;
+  font-weight: 500;
+
+  letter-spacing: 0.02em;
 }
 
-.footer-links a {
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 0.85rem;
+/*
+ * LinkedIn footer button.
+ *
+ * The button keeps the same appearance whether the link
+ * has been visited or not. Hover and active states provide
+ * a small visual response without introducing browser-default
+ * purple visited-link styling.
+ */
+.footer-link,
+.footer-link:link,
+.footer-link:visited {
+  display: inline-block;
 
-  padding: 0.45em 0.8em;
-  border-radius: 8px;
+  color: var(--text-secondary);
+
+  text-decoration: none;
+
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  padding: 0.55em 1em;
+
+  border-radius: 999px;
+
+  background: var(--glass);
+
+  border: 1px solid var(--border);
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 0 1px rgba(255, 255, 255, 0.08);
 
   transition:
     color 0.25s ease,
-    background 0.25s ease;
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.footer-links a:hover {
-  color: #4cc9f0;
+
+/*
+ * Hover state.
+ */
+.footer-link:hover {
+  color: var(--accent);
+
   background: rgba(76, 201, 240, 0.1);
+
+  border-color: rgba(76, 201, 240, 0.3);
+
+  box-shadow:
+    0 6px 18px rgba(76, 201, 240, 0.15);
+
+  transform: translateY(-2px);
+}
+
+
+/*
+ * Keyboard focus.
+ */
+.footer-link:focus-visible {
+  color: var(--accent);
+
+  background: rgba(76, 201, 240, 0.1);
+
+  border-color: rgba(76, 201, 240, 0.3);
+
+  outline: 2px solid rgba(76, 201, 240, 0.5);
+  outline-offset: 2px;
+}
+
+
+/*
+ * Pressed state.
+ */
+.footer-link:active {
+  color: var(--accent);
+
+  background: rgba(76, 201, 240, 0.15);
+
+  transform: translateY(0);
+
+  box-shadow:
+    0 3px 10px rgba(76, 201, 240, 0.12);
+}
+
+
+/*
+ * Light mode.
+ */
+body.light .footer-link,
+body.light .footer-link:link,
+body.light .footer-link:visited {
+  color: var(--text-secondary);
+
+  background: rgba(255, 255, 255, 0.6);
+
+  border-color: rgba(0, 0, 0, 0.08);
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+
+body.light .footer-link:hover {
+  color: var(--accent);
+
+  background: rgba(76, 201, 240, 0.1);
+
+  border-color: rgba(76, 201, 240, 0.3);
 }
 
 .footer-bottom {
   max-width: 1000px;
+
   margin: 1.5em auto 0;
+
   padding-top: 1em;
 
   border-top: 1px solid var(--border);
 
   color: var(--text-muted);
+
   font-size: 0.7rem;
 }
 
-/* ================= LIGHT MODE FOOTER ================= */
 
-body.light .site-footer {
-  background: rgba(255, 255, 255, 0.72);
+/* =========================================================
+   12. RESPONSIVE DESIGN
+   ========================================================= */
 
-  border-top-color: rgba(0, 0, 0, 0.08);
+/*
+ * Tablet / smaller desktop.
+ */
+@media (max-width: 800px) {
+  .hero-name {
+    font-size: 3.2rem;
+  }
 
-  box-shadow:
-    0 -8px 30px rgba(0, 0, 0, 0.04);
+  section {
+    max-width: 1000px;
 
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+    margin: 60px auto 0;
+    padding: 120px 20px;
+  }
 }
 
-body.light .footer-bottom {
-  border-top-color: rgba(0, 0, 0, 0.08);
-}
-
-/* ================= MOBILE FOOTER ================= */
-
+/*
+ * Mobile.
+ */
 @media (max-width: 600px) {
+  nav .container {
+    padding: 0.8em 1em;
+  }
+
+  nav ul {
+    gap: 0.4em;
+  }
+
+  nav ul li a {
+    padding: 0.45em 0.6em;
+    font-size: 0.9rem;
+  }
+
+  .hero-name {
+    font-size: 2.5rem;
+  }
+
+  .hero-content {
+    padding: 2em 1.2em;
+  }
+
+  section {
+    max-width: 1000px;
+
+    margin: 60px auto 0;
+    padding: 120px 20px;
+  }
+
+  .about-section,
+  .skills-section,
+  .hero-section {
+    border-radius: 16px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /*
+   * Footer stacks vertically on narrow screens.
+   */
   .footer-content {
     flex-direction: column;
+
     align-items: flex-start;
+
     gap: 1.2em;
   }
 
